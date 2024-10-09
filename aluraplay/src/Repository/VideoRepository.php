@@ -11,10 +11,11 @@ class VideoRepository
 
   public function add(Video $video): Video
   {
-    $sql = 'INSERT INTO videos (url, title) VALUES (?, ?)';
+    $sql = 'INSERT INTO videos (url, title, image_path) VALUES (?, ?, ?)';
     $statement = $this->pdo->prepare($sql);
     $statement->bindValue(1, $video->url);
     $statement->bindValue(2, $video->title);
+    $statement->bindValue(3, $video->getFilePath());
     $statement->execute();
 
     $id = $this->pdo->lastInsertId();
@@ -54,6 +55,7 @@ class VideoRepository
     return array_map(function (array $videoData) {
       $video = new Video($videoData['url'], $videoData['title']);
       $video->setId($videoData['id']);
+      $video->setFilePath($videoData['image_path']);
       return $video;
     }, $videoList);
   }

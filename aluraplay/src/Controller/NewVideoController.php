@@ -20,7 +20,18 @@ class NewVideoController implements Controller
     }
     $titulo = filter_input(INPUT_POST, 'titulo');
 
-    if ($this->videoRepository->add(new Video($url, $titulo))) {
+    $video = new Video($url, $titulo);
+
+    if ($_FILES['image']['error'] === UPLOAD_ERR_OK) {
+      move_uploaded_file(
+        $_FILES['image']['tmp_name'],
+        __DIR__ . '/../../public/img/uploads/' . $_FILES['image']['name']
+      );
+      $video->setFilePath($_FILES['image']['name']);
+    }
+
+
+    if ($this->videoRepository->add($video)) {
       header('Location: /index.php?success=true');
     } else {
       header('Location: /index.php?success=false');
