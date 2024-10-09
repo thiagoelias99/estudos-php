@@ -18,6 +18,7 @@ Curso de PHP na web com foco no padrão MVC onde foi desenvolvido um player de v
 - Upload de imagem
 - Password Rehash
 - Validação de tipo de arquivo (upload).
+- Api endpoint.
 
 ### Execução do App
 1. Executar as migrations do banco de dados com 

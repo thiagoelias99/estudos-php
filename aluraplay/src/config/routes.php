@@ -8,7 +8,8 @@ use App\Controller\{
   VideoListController,
   LoginFormController,
   LoginController,
-  LogoutController
+  LogoutController,
+  ApiVideoListController
 };
 
 return[
@@ -20,5 +21,6 @@ return[
   "POST|/remover-video" => DeleteVideoController::class,
   "GET|/login" => LoginFormController::class,
   "POST|/login" => LoginController::class,
-  "GET|/logout" => LogoutController::class
+  "GET|/logout" => LogoutController::class,
+  "GET|/api/videos" => ApiVideoListController::class
 ];
