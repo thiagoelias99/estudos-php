@@ -1,8 +1,8 @@
 <?php
 
 use App\Repository\VideoRepository;
-use App\Controller\Controller;
 require_once __DIR__ . "/../vendor/autoload.php";
+use Psr\Http\Server\RequestHandlerInterface;
 
 session_start();
 session_regenerate_id();
@@ -30,7 +30,7 @@ $pdo = new PDO("sqlite:$dbPath");
 $videoRepository = new VideoRepository($pdo);
 
 $controllerClass = $routes[$key];
-/** @var Controller $controller */
+/** @var RequestHandlerInterface $controller */
 $controller = new $controllerClass($videoRepository);
 
 
@@ -48,7 +48,7 @@ $creator = new \Nyholm\Psr7Server\ServerRequestCreator(
 
 $request = $creator->fromGlobals();
 
-$response = $controller->execute($request);
+$response = $controller->handle($request);
 http_response_code($response->getStatusCode());
 foreach ($response->getHeaders() as $name => $values) {
     foreach ($values as $value) {  

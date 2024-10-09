@@ -6,14 +6,15 @@ use App\Repository\VideoRepository;
 use Nyholm\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
-class ApiVideoListController implements Controller
+class ApiVideoListController implements RequestHandlerInterface
 {
   public function __construct(
     private VideoRepository $videoRepository
   ) {}
 
-  public function execute(ServerRequestInterface $request): ResponseInterface
+  public function handle(ServerRequestInterface $request): ResponseInterface
   {
     $videos = $this->videoRepository->all();
     return new Response(200, [

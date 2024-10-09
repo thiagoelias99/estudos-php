@@ -7,8 +7,9 @@ use App\Traits\ErrorMessageTrait;
 use Nyholm\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
-class DeleteVideoController implements Controller
+class DeleteVideoController implements RequestHandlerInterface
 {
   use ErrorMessageTrait;
 
@@ -16,7 +17,7 @@ class DeleteVideoController implements Controller
     private VideoRepository $videoRepository
   ) {}
 
-  public function execute(ServerRequestInterface $request): ResponseInterface
+  public function handle(ServerRequestInterface $request): ResponseInterface
   {
     $queryParams = $request->getParsedBody();
     $id = filter_var($queryParams['id'], FILTER_VALIDATE_INT);

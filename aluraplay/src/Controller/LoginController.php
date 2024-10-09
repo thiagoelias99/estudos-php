@@ -8,8 +8,9 @@ use Nyholm\Psr7\Response;
 use PDO;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
-class LoginController implements Controller
+class LoginController implements RequestHandlerInterface
 {
   use ErrorMessageTrait;
 
@@ -23,7 +24,7 @@ class LoginController implements Controller
     $this->pdo = new PDO("sqlite:$dbPath");
   }
 
-  public function execute(ServerRequestInterface $request): ResponseInterface
+  public function handle(ServerRequestInterface $request): ResponseInterface
   {
     $body = $request->getParsedBody();
     $username = filter_var($body['usuario']);

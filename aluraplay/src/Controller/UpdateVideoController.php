@@ -8,8 +8,9 @@ use App\Traits\ErrorMessageTrait;
 use Nyholm\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
-class UpdateVideoController implements Controller
+class UpdateVideoController implements RequestHandlerInterface
 {
   use ErrorMessageTrait;
 
@@ -17,7 +18,7 @@ class UpdateVideoController implements Controller
     private VideoRepository $videoRepository
   ) {}
 
-  public function execute(ServerRequestInterface $request): ResponseInterface
+  public function handle(ServerRequestInterface $request): ResponseInterface
   {
     $body = $request->getParsedBody();
 

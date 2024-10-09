@@ -23,6 +23,7 @@ Curso de PHP na web com foco no padrão MVC onde foi desenvolvido um player de v
 - Flash messages
 - Traits
 - PSR 7 e 17
+- PSR 15
 
 ### Execução do App
 1. Executar as migrations do banco de dados com 

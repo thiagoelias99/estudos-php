@@ -7,8 +7,9 @@ use App\Traits\RenderTemplateTrait;
 use Nyholm\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
-class VideoListController implements Controller
+class VideoListController implements RequestHandlerInterface
 {
   use RenderTemplateTrait;
 
@@ -16,7 +17,7 @@ class VideoListController implements Controller
     private VideoRepository $videoRepository
   ) {}
 
-  public function execute(ServerRequestInterface $request): ResponseInterface
+  public function handle(ServerRequestInterface $request): ResponseInterface
   {
     $videos = $this->videoRepository->all();
 
