@@ -5,7 +5,10 @@ use App\Controller\{
   NewVideoController,
   UpdateVideoController,
   VideoFormController,
-  VideoListController
+  VideoListController,
+  LoginFormController,
+  LoginController,
+  LogoutController
 };
 
 return[
@@ -14,5 +17,8 @@ return[
   "POST|/novo-video" => NewVideoController::class,
   "GET|/editar-video" => VideoFormController::class,
   "POST|/editar-video" => UpdateVideoController::class,
-  "POST|/remover-video" => DeleteVideoController::class
+  "POST|/remover-video" => DeleteVideoController::class,
+  "GET|/login" => LoginFormController::class,
+  "POST|/login" => LoginController::class,
+  "GET|/logout" => LogoutController::class
 ];
