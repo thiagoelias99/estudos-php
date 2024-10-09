@@ -23,13 +23,21 @@ class NewVideoController implements Controller
     $video = new Video($url, $titulo);
 
     if ($_FILES['image']['error'] === UPLOAD_ERR_OK) {
-      move_uploaded_file(
-        $_FILES['image']['tmp_name'],
-        __DIR__ . '/../../public/img/uploads/' . $_FILES['image']['name']
-      );
-      $video->setFilePath($_FILES['image']['name']);
-    }
+      //Verificar tipo do arquivo
+      $filePath = $_FILES['image']['name'];
+      $fileInfo = new \finfo(FILEINFO_MIME_TYPE);
+      $mimeType = $fileInfo->file($_FILES['image']['tmp_name']);
 
+      if(str_starts_with($mimeType, 'image/')) {
+        //Adiciona id único ao nome do arquivo
+        $safeFileName = uniqid() . '-' . basename($filePath);
+        move_uploaded_file(
+          $_FILES['image']['tmp_name'],
+          __DIR__ . '/../../public/img/uploads/' . $safeFileName
+        );
+        $video->setFilePath($safeFileName);
+      }
+    }
 
     if ($this->videoRepository->add($video)) {
       header('Location: /index.php?success=true');

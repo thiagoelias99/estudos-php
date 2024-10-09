@@ -5,6 +5,7 @@ use App\Controller\Controller;
 require_once __DIR__ . "/../vendor/autoload.php";
 
 session_start();
+session_regenerate_id();
 
 $pathInfo = $_SERVER['PATH_INFO'] ?? '/';
 $httpMethod = $_SERVER['REQUEST_METHOD'];

@@ -31,6 +31,13 @@ class LoginController implements Controller
     $isCorrectPassword = password_verify($password, $user['password']);
 
     if ($isCorrectPassword) {
+      if (password_needs_rehash($user['password'], PASSWORD_ARGON2ID)) {
+        $statement = $this->pdo->prepare('UPDATE users SET password = ? WHERE id = ?');
+        $statement->bindValue(1, password_hash($password, PASSWORD_ARGON2ID));
+        $statement->bindValue(2, $user['id']);
+        $statement->execute();
+      }
+
       $_SESSION['logged'] = true;
       header('Location: /');
     } else {
