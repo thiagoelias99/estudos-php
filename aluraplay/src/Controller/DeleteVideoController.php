@@ -3,20 +3,28 @@
 namespace App\Controller;
 
 use App\Repository\VideoRepository;
+use App\Traits\ErrorMessageTrait;
+use Nyholm\Psr7\Response;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 class DeleteVideoController implements Controller
 {
+  use ErrorMessageTrait;
+
   public function __construct(
     private VideoRepository $videoRepository
   ) {}
 
-  public function execute(): void
+  public function execute(ServerRequestInterface $request): ResponseInterface
   {
-    $id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+    $queryParams = $request->getParsedBody();
+    $id = filter_var($queryParams['id'], FILTER_VALIDATE_INT);
     if ($this->videoRepository->remove($id)) {
-      header('Location: /index.php?sucesso=0');
+      $this->setErrorMessage('Erro ao excluir o vídeo');
+      return new Response(500, ['Location' => '/']);
     } else {
-      header('Location: /index.php?sucesso=1');
+      return new Response(302, ['Location' => '/']);
     }
   }
 }

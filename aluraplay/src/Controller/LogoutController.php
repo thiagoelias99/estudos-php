@@ -2,11 +2,15 @@
 
 namespace App\Controller;
 
+use Nyholm\Psr7\Response;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+
 class LogoutController implements Controller
 {
-  public function execute(): void
+  public function execute(ServerRequestInterface $request): ResponseInterface
   {
     $_SESSION['logged'] = false;
-    header('Location: /login');
+    return new Response(302, ['Location' => '/login']);
   }
 }

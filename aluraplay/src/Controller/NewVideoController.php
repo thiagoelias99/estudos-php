@@ -4,45 +4,54 @@ namespace App\Controller;
 
 use App\Repository\VideoRepository;
 use App\Entity\Video;
+use App\Traits\ErrorMessageTrait;
+use Nyholm\Psr7\Response;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 class NewVideoController implements Controller
 {
+  use ErrorMessageTrait;
+
   public function __construct(
     private VideoRepository $videoRepository
   ) {}
 
-  public function execute(): void
+  public function execute(ServerRequestInterface $request): ResponseInterface
   {
-    $url = filter_input(INPUT_POST, 'url', FILTER_VALIDATE_URL);
+    $body = $request->getParsedBody();
+
+    $url = filter_var($body['url'], FILTER_VALIDATE_URL);
     if ($url === false) {
-      header('Location: /index.php?sucesso=0');
-      exit();
+      $this->setErrorMessage('URL inválida');
+      return new Response(400, ['Location' => '/novo-video']);
     }
-    $titulo = filter_input(INPUT_POST, 'titulo');
+    $titulo = filter_var($body['titulo']);
 
     $video = new Video($url, $titulo);
+    $files = $request->getUploadedFiles();
+    /** @var UploadedFileInterface $uploadedImage */
+    $uploadedImage = $files['image'];
 
-    if ($_FILES['image']['error'] === UPLOAD_ERR_OK) {
+    if ($uploadedImage->getError() === UPLOAD_ERR_OK) {
       //Verificar tipo do arquivo
-      $filePath = $_FILES['image']['name'];
+      $tmpFile = $uploadedImage->getStream()->getMetadata('uri');
       $fileInfo = new \finfo(FILEINFO_MIME_TYPE);
-      $mimeType = $fileInfo->file($_FILES['image']['tmp_name']);
+      $mimeType = $fileInfo->file($tmpFile);
+      $filePath = $uploadedImage->getClientFilename();
 
       if(str_starts_with($mimeType, 'image/')) {
-        //Adiciona id único ao nome do arquivo
-        $safeFileName = uniqid() . '-' . basename($filePath);
-        move_uploaded_file(
-          $_FILES['image']['tmp_name'],
-          __DIR__ . '/../../public/img/uploads/' . $safeFileName
-        );
+        $safeFileName = uniqid('upload_') . '-' . basename($filePath);
+        $uploadedImage->moveTo(__DIR__ . '/../../public/img/uploads/' . $safeFileName);
         $video->setFilePath($safeFileName);
       }
     }
 
     if ($this->videoRepository->add($video)) {
-      header('Location: /index.php?success=true');
+      return new Response(302, ['Location' => '/']);
     } else {
-      header('Location: /index.php?success=false');
+      $this->setErrorMessage('Erro ao adicionar vídeo');
+      return new Response(500, ['Location' => '/novo-video']);
     }
   }
 }

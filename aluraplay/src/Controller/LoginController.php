@@ -3,10 +3,16 @@
 namespace App\Controller;
 
 use App\Repository\VideoRepository;
+use App\Traits\ErrorMessageTrait;
+use Nyholm\Psr7\Response;
 use PDO;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 class LoginController implements Controller
 {
+  use ErrorMessageTrait;
+
   private PDO $pdo;
 
   public function __construct(
@@ -17,10 +23,11 @@ class LoginController implements Controller
     $this->pdo = new PDO("sqlite:$dbPath");
   }
 
-  public function execute(): void
+  public function execute(ServerRequestInterface $request): ResponseInterface
   {
-    $username = filter_input(INPUT_POST, 'usuario');
-    $password = filter_input(INPUT_POST, 'senha');
+    $body = $request->getParsedBody();
+    $username = filter_var($body['usuario']);
+    $password = filter_var($body['senha']);
 
     $sql = "SELECT * FROM users WHERE email = :username";
     $statement = $this->pdo->prepare($sql);
@@ -39,9 +46,10 @@ class LoginController implements Controller
       }
 
       $_SESSION['logged'] = true;
-      header('Location: /');
+      return new Response(302, ['Location' => '/']);
     } else {
-      header('Location: /login?succes=false');
+      $this->setErrorMessage('Usuário ou senha inválidos');
+      return new Response(404, ['Location' => '/login']);
     }
   }
 }

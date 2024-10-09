@@ -4,30 +4,39 @@ namespace App\Controller;
 
 use App\Repository\VideoRepository;
 use App\Entity\Video;
+use App\Traits\ErrorMessageTrait;
+use Nyholm\Psr7\Response;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 class UpdateVideoController implements Controller
 {
+  use ErrorMessageTrait;
+
   public function __construct(
     private VideoRepository $videoRepository
   ) {}
 
-  public function execute(): void
+  public function execute(ServerRequestInterface $request): ResponseInterface
   {
-    $id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
-    $url = filter_input(INPUT_POST, 'url', FILTER_VALIDATE_URL);
+    $body = $request->getParsedBody();
+
+    $id = filter_var($body['id'], FILTER_VALIDATE_INT);
+    $url = filter_var($body['url'], FILTER_VALIDATE_URL);
     if ($url === false || $id === false) {
-      header('Location: /index.php?sucesso=0');
-      exit();
+      $this->setErrorMessage('URL inválida');
+      return new Response(400, ['Location' => '/']);
     }
-    $titulo = filter_input(INPUT_POST, 'titulo');
+    $titulo = filter_var($body['titulo']);
 
     $video = new Video($url, $titulo);
     $video->setId($id);
 
     if ($this->videoRepository->update($video)) {
-      header('Location: /index.php?success=true');
+      return new Response(302, ['Location' => '/']);
     } else {
-      header('Location: /index.php?success=false');
+      $this->setErrorMessage('Erro ao atualizar vídeo');
+      return new Response(500, ['Location' => '/']);
     }
   }
 }

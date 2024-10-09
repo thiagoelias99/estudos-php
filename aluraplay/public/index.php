@@ -32,4 +32,28 @@ $videoRepository = new VideoRepository($pdo);
 $controllerClass = $routes[$key];
 /** @var Controller $controller */
 $controller = new $controllerClass($videoRepository);
-$controller->execute();
+
+
+
+
+
+$psr17Factory = new \Nyholm\Psr7\Factory\Psr17Factory();
+
+$creator = new \Nyholm\Psr7Server\ServerRequestCreator(
+    $psr17Factory, // ServerRequestFactory
+    $psr17Factory, // UriFactory
+    $psr17Factory, // UploadedFileFactory
+    $psr17Factory  // StreamFactory
+);
+
+$request = $creator->fromGlobals();
+
+$response = $controller->execute($request);
+http_response_code($response->getStatusCode());
+foreach ($response->getHeaders() as $name => $values) {
+    foreach ($values as $value) {  
+        header (sprintf('%s: %s', $name, $value), false);
+    }
+}
+
+echo $response->getBody();

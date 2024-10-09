@@ -41,6 +41,9 @@ body {
     cursor: pointer;
 }
 
+body > header {
+    height: 80px;
+}
 
 .cabecalho__videos {
     background-image: url(../img/cabecalho/video_call.png);
@@ -108,4 +111,9 @@ body {
         height: 100vh;
     }
 
+}
+
+.formulario__titulo.erro {
+    color: red;
+    margin-top: 1rem;
 }

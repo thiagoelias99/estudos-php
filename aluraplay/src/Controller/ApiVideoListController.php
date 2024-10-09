@@ -3,6 +3,9 @@
 namespace App\Controller;
 
 use App\Repository\VideoRepository;
+use Nyholm\Psr7\Response;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 class ApiVideoListController implements Controller
 {
@@ -10,9 +13,11 @@ class ApiVideoListController implements Controller
     private VideoRepository $videoRepository
   ) {}
 
-  public function execute(): void
+  public function execute(ServerRequestInterface $request): ResponseInterface
   {
     $videos = $this->videoRepository->all();
-    echo json_encode($videos);
+    return new Response(200, [
+      'Content-Type' => 'application/json'
+    ], body: json_encode($videos));
   }
 }

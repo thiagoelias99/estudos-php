@@ -19,6 +19,10 @@ Curso de PHP na web com foco no padrão MVC onde foi desenvolvido um player de v
 - Password Rehash
 - Validação de tipo de arquivo (upload).
 - Api endpoint.
+- ViewController || Output buffer
+- Flash messages
+- Traits
+- PSR 7 e 17
 
 ### Execução do App
 1. Executar as migrations do banco de dados com 
