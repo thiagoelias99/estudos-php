@@ -24,6 +24,7 @@ Curso de PHP na web com foco no padrão MVC onde foi desenvolvido um player de v
 - Traits
 - PSR 7 e 17
 - PSR 15
+- PSR 11 - Injeção de Dependências
 
 ### Execução do App
 1. Executar as migrations do banco de dados com 
