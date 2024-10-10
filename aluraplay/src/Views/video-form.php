@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . "/html-start.php";
+$this->layout("layout");
 ?>
 <main class="container">
   <form
@@ -33,4 +33,3 @@ require_once __DIR__ . "/html-start.php";
       <input class="formulario__botao" type="submit" value="Enviar" />
   </form>
 </main>
-<?php require_once __DIR__ . "/html-end.php";

@@ -4,7 +4,7 @@ use App\Entity\Video;
 
 /** @var Video[] $videos */
 
-require_once __DIR__ . "/html-start.php";
+$this->layout("layout");
 ?>
 <ul class="videos__container" alt="videos alura">
   <?php foreach ($videos as $video) : ?>
@@ -35,4 +35,3 @@ require_once __DIR__ . "/html-start.php";
     </li>
   <?php endforeach; ?>
 </ul>
-<?php require_once __DIR__ . "/html-end.php";
