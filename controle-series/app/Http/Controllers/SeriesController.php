@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SeriesFormRequest;
 use App\Models\Serie;
 use Illuminate\Http\Request;
 
@@ -13,8 +14,11 @@ class SeriesController extends Controller
             ->orderBy('nome')
             ->get();
 
+        $message = session()->get('message');
+
         return view('series.index',)
-            ->with('series', $series);
+            ->with('series', $series)
+            ->with('message', $message);
     }
 
     function create()
@@ -22,13 +26,31 @@ class SeriesController extends Controller
         return view('series.create');
     }
 
-    function store(Request $request)
+    function store(SeriesFormRequest $request)
     {
-        $nome = $request->input('nome');
-        $serie = new Serie();
-        $serie->nome = $nome;
-        $serie->save();
+        $series = Serie::create($request->all());
+        return to_route('series.index')
+            ->with('message', "Série {$series->nome} adicionada com sucesso");
+    }
 
-        return redirect('/series');
+    function destroy(Serie $series, Request $request)
+    {
+        $series->delete();
+        return to_route('series.index')
+            ->with('message', "Série {$series->nome} removida com sucesso");
+    }
+
+    function edit(Serie $series)
+    {
+        return view('series.edit')
+            ->with('series', $series);
+    }
+
+    function update(Serie $series, SeriesFormRequest $request)
+    {
+        $series->fill($request->all());
+        $series->save();
+        return to_route('series.index')
+            ->with('message', "Série {$series->nome} atualizada com sucesso");
     }
 }

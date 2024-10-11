@@ -7,15 +7,20 @@ Curso de Laravel com foco no padrão MVC onde foi desenvolvido um controle de se
 - Laravel
 - Artisan
 - Routes
+    - Controller
+    - Resource
 - Controller
     - Padrão de nomes
     - Request
     - Response
+    - Redirect
+    - Session
+    - Flash Message
 - Views
     - Layout
     - Blade
-    - Componentes
-    - Formulário
+    - Components
+    - Forms
     - Bootstrap
 - Models
     - Eloquent ORM
