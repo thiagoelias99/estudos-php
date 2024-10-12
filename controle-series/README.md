@@ -30,6 +30,9 @@ Curso de Laravel com foco no padrão MVC onde foi desenvolvido um controle de se
 - Database
     - Migrations
     - Relationships
+    - Transactions
+- Repositories
+- Service Container
 
 ### Execução do App
 1. Executar comando ```composer install``` para instalar as dependências.
