@@ -14,7 +14,12 @@
             <a class="navbar-brand" href="{{route("series.index")}}">
                 Home
             </a>
+            @auth
             <a href="{{ route('logout') }}" class="btn btn-dark">Sair</a>
+            @endauth
+            @guest
+            <a href="{{ route('login') }}" class="btn btn-dark">Entrar</a>
+            @endguest
         </div>
     </nav>
 

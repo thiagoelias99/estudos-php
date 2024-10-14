@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Middleware\Autenticador;
 use App\Http\Requests\SeriesFormRequest;
 use App\Models\Series;
 use App\Repositories\EloquentSeriesRepository;
@@ -12,7 +13,9 @@ class SeriesController extends Controller
 {
     public function __construct(
         private SeriesRepository $repository
-    ) {}
+    ) {
+
+    }
 
     function index()
     {
