@@ -25,6 +25,7 @@ export const AppProvider = ({ children }: PropsWithChildren) => {
 
     // Define the state
     const [user, setUser] = useState<string | null>(null)
+    // const [token, _setToken] = useState<string | null>(localStorage.getItem('ACCESS_TOKEN'))
     const [token, _setToken] = useState<string | null>(localStorage.getItem('ACCESS_TOKEN'))
 
     const setToken = (token: string | null) => {
