@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\SeriesCreated as SeriesCreatedEvent;
 use App\Http\Middleware\Autenticador;
 use App\Http\Requests\SeriesFormRequest;
 use App\Mail\SeriesCreated;
+
 use App\Models\Series;
 use App\Models\User;
 use App\Repositories\EloquentSeriesRepository;
@@ -37,6 +39,19 @@ class SeriesController extends Controller
     function store(SeriesFormRequest $request)
     {
         $series = $this->repository->add($request);
+        // $seriesCreatedEvent = new SeriesCreated(
+        //     $series->nome,
+        //     $series->id,
+        //     $request->seasonsQty,
+        //     $request->episodes
+        // );
+        // event($seriesCreatedEvent);
+        SeriesCreatedEvent::dispatch(
+            $series->nome,
+            $series->id,
+            $request->seasonsQty,
+            $request->episodes
+        );
 
 
         // $email = new SeriesCreated(
@@ -46,20 +61,21 @@ class SeriesController extends Controller
         //     episodiosPorTemporada: $request->episodes
         // );
 
-        $users = User::all();
+        // $users = User::all();
         // Mail::to($users)->send($email);
 
         //Enviando de forma lenta para teste de filas
-        $users->each(function (User $user) use ($series, $request) {
-            $email = new SeriesCreated(
-                nomeSerie: $series->nome,
-                idSerie: $series->id,
-                qtdTemporadas: $request->seasonsQty,
-                episodiosPorTemporada: $request->episodes
-            );
-            Mail::to($user)->send($email);
-            sleep(2.5);
-        });
+        // $users->each(function (User $user) use ($series, $request) {
+        //     $email = new SeriesCreated(
+        //         nomeSerie: $series->nome,
+        //         idSerie: $series->id,
+        //         qtdTemporadas: $request->seasonsQty,
+        //         episodiosPorTemporada: $request->episodes
+        //     );
+
+        //     $when = now()->addSeconds(10);
+        //     Mail::to($user)->later($when , $email);
+        // });
 
 
 

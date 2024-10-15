@@ -36,8 +36,12 @@ Curso de Laravel com foco no padrão MVC onde foi desenvolvido um controle de se
 - Middleware
 - Autenticação com session
 - Mailer
+- Queue
+- Listener
+- Log
 
 ### Execução do App
 1. Executar comando ```composer install``` para instalar as dependências.
 1. Executar comando ```php artisan migrate``` para criar o banco de dados (sqlite).
 1. Executar comando ```php -S localhost:8000 -t public``` para iniciar a aplicação.
+1. Executar comando ```php artisan queue:work --tries=3 --delay=10``` para iniciar o listener de jobs.
