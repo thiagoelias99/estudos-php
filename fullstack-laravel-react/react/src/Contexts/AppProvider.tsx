@@ -1,9 +1,10 @@
 import { createContext, PropsWithChildren, useState } from 'react'
+import { IUser } from '../Models/User'
 
 // Define the context interface
 interface IAppContext {
-    user?: string | null
-    setUser?: (user: string | null) => void
+    user?: IUser | null
+    setUser?: (user: IUser | null) => void
     token?: string | null
     setToken?: (token: string | null) => void
 
@@ -24,9 +25,9 @@ AppContext.displayName = 'App'
 export const AppProvider = ({ children }: PropsWithChildren) => {
 
     // Define the state
-    const [user, setUser] = useState<string | null>(null)
-    // const [token, _setToken] = useState<string | null>(localStorage.getItem('ACCESS_TOKEN'))
+    const [user, setUser] = useState<IUser | null>({ name: 'Thiago' })
     const [token, _setToken] = useState<string | null>(localStorage.getItem('ACCESS_TOKEN'))
+    // const [token, _setToken] = useState<string | null>('123')
 
     const setToken = (token: string | null) => {
         _setToken(token)
