@@ -8,6 +8,7 @@ use App\Models\Series;
 use App\Repositories\SeriesRepository;
 use Illuminate\Http\Request;
 use App\Events\SeriesCreated as SeriesCreatedEvent;
+use Illuminate\Contracts\Auth\Authenticatable;
 
 class SeriesController extends Controller
 {
@@ -52,9 +53,15 @@ class SeriesController extends Controller
         return response()->json($series, 200);
     }
 
-    public function destroy(int $id)
+    public function destroy(int $id, Authenticatable $user)
     {
-        Series::destroy($id);
-        return response()->json(null, 204);
+        if ($user->tokenCan('series:delete')){
+            Series::destroy($id);
+            return response()->json(null, 204);
+        } else {
+            return response()->json([
+                'message' => 'Unauthorized'
+            ], 401);
+        }
     }
 }
