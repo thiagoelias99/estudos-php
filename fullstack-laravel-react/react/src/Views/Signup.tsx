@@ -1,13 +1,15 @@
 import { createRef, useState } from 'react'
 import { useAppContext } from '../Hooks/useAppContext'
 import { Link } from 'react-router-dom'
+import axiosClient from '../axios-client'
+import { IUser } from '../Models/User'
 
 export default function Signup() {
     const nameRef = createRef<HTMLInputElement>()
     const emailRef = createRef<HTMLInputElement>()
     const passwordRef = createRef<HTMLInputElement>()
     const passwordConfirmationRef = createRef<HTMLInputElement>()
-    const {setUser, setToken} = useAppContext()
+    const { setUser, setToken } = useAppContext()
     const [errors, setErrors] = useState(null)
 
 
@@ -21,18 +23,17 @@ export default function Signup() {
             password_confirmation: passwordConfirmationRef.current?.value,
         }
 
-        console.log('Payload', payload)
-        // axiosClient.post('/login', payload)
-        //     .then(({ data }) => {
-        //         setUser(data.user)
-        //         setToken(data.token);
-        //     })
-        //     .catch((err) => {
-        //         const response = err.response;
-        //         if (response && response.status === 422) {
-        //             setMessage(response.data.message)
-        //         }
-        //     })
+        axiosClient.post<{ user: IUser, token: string }>('/signup', payload)
+            .then(({ data }) => {
+                setUser(data.user)
+                setToken(data.token);
+            })
+            .catch(err => {
+                const response = err.response;
+                if (response && response.status === 422) {
+                    setErrors(response.data.errors)
+                }
+            })
     }
 
     return (

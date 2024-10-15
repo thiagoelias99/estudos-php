@@ -1,6 +1,8 @@
 import { createRef, useState } from 'react'
 import { useAppContext } from '../Hooks/useAppContext'
 import { Link } from 'react-router-dom'
+import axiosClient from '../axios-client'
+import { IUser } from '../Models/User'
 
 export default function Login() {
     const emailRef = createRef<HTMLInputElement>()
@@ -15,18 +17,17 @@ export default function Login() {
             email: emailRef.current?.value,
             password: passwordRef.current?.value,
         }
-        console.log('Payload', payload)
-        // axiosClient.post('/login', payload)
-        //     .then(({ data }) => {
-        //         setUser(data.user)
-        //         setToken(data.token);
-        //     })
-        //     .catch((err) => {
-        //         const response = err.response;
-        //         if (response && response.status === 422) {
-        //             setMessage(response.data.message)
-        //         }
-        //     })
+        axiosClient.post<{ user: IUser, token: string }>('/login', payload)
+            .then(({ data }) => {
+                setUser(data.user)
+                setToken(data.token);
+            })
+            .catch((err) => {
+                const response = err.response;
+                if (response && response.status === 422) {
+                    setMessage(response.data.message)
+                }
+            })
     }
 
 

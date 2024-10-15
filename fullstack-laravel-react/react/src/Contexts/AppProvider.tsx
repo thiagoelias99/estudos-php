@@ -4,9 +4,9 @@ import { IUser } from '../Models/User'
 // Define the context interface
 interface IAppContext {
     user?: IUser | null
-    setUser?: (user: IUser | null) => void
+    setUser: (user: IUser | null) => void
     token?: string | null
-    setToken?: (token: string | null) => void
+    setToken: (token: string | null) => void
 
 }
 
