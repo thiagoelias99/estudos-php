@@ -39,6 +39,7 @@ Curso de Laravel com foco no padrão MVC onde foi desenvolvido um controle de se
 - Queue
 - Listener
 - Log
+- Upload de arquivos
 
 ### Execução do App
 1. Executar comando ```composer install``` para instalar as dependências.

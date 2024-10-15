@@ -3,18 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Events\SeriesCreated as SeriesCreatedEvent;
-use App\Http\Middleware\Autenticador;
 use App\Http\Requests\SeriesFormRequest;
-use App\Mail\SeriesCreated;
-
 use App\Models\Series;
-use App\Models\User;
-use App\Repositories\EloquentSeriesRepository;
 use App\Repositories\SeriesRepository;
 use Illuminate\Http\Request;
-use Illuminate\Mail\Mailer;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
 
 class SeriesController extends Controller
 {
@@ -38,48 +30,15 @@ class SeriesController extends Controller
 
     function store(SeriesFormRequest $request)
     {
+        $coverPath = $request->file('cover')->store('series_cover', 'public');
+        $request->coverPath = $coverPath;
         $series = $this->repository->add($request);
-        // $seriesCreatedEvent = new SeriesCreated(
-        //     $series->nome,
-        //     $series->id,
-        //     $request->seasonsQty,
-        //     $request->episodes
-        // );
-        // event($seriesCreatedEvent);
         SeriesCreatedEvent::dispatch(
             $series->nome,
             $series->id,
             $request->seasonsQty,
             $request->episodes
         );
-
-
-        // $email = new SeriesCreated(
-        //     nomeSerie: $series->nome,
-        //     idSerie: $series->id,
-        //     qtdTemporadas: $request->seasonsQty,
-        //     episodiosPorTemporada: $request->episodes
-        // );
-
-        // $users = User::all();
-        // Mail::to($users)->send($email);
-
-        //Enviando de forma lenta para teste de filas
-        // $users->each(function (User $user) use ($series, $request) {
-        //     $email = new SeriesCreated(
-        //         nomeSerie: $series->nome,
-        //         idSerie: $series->id,
-        //         qtdTemporadas: $request->seasonsQty,
-        //         episodiosPorTemporada: $request->episodes
-        //     );
-
-        //     $when = now()->addSeconds(10);
-        //     Mail::to($user)->later($when , $email);
-        // });
-
-
-
-
 
         return to_route('series.index')
             ->with('message', "Série {$series->nome} adicionada com sucesso");
