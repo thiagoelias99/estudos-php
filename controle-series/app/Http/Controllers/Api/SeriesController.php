@@ -25,8 +25,10 @@ class SeriesController extends Controller
         return Series::paginate();
     }
 
-    public function store(SeriesFormRequest $request)
+    public function store(SeriesFormRequest $request, Authenticatable $user)
     {
+        dd($user);
+
         $series = $this->seriesRepository->add($request);
         SeriesCreatedEvent::dispatch(
             $series->nome,
