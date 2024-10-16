@@ -3,7 +3,7 @@ import { useAppContext } from '../../Hooks/useAppContext';
 import axiosClient from '../../axios-client';
 
 export default function DefaultLayout() {
-    const { token, user, setToken, setUser } = useAppContext();
+    const { token, user, setToken, setUser, notification } = useAppContext();
 
     if (!token) {
         return <Navigate to="/login" />
@@ -36,11 +36,11 @@ export default function DefaultLayout() {
                 <main>
                     <Outlet />
                 </main>
-                {/* {notification &&
+                {notification &&
                     <div className="notification">
                         {notification}
                     </div>
-                } */}
+                }
             </div>
         </div>
     )
