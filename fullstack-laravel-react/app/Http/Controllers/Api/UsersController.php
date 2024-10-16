@@ -46,6 +46,7 @@ class UsersController extends Controller
     public function update(UpdateUserRequest $request, User $user)
     {
         $data = $request->validated();
+        dd($data);
         if (isset($data['password'])) {
             $data['password'] = Hash::make($data['password']);
         }

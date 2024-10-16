@@ -25,7 +25,7 @@ class UpdateUserRequest extends FormRequest
         return [
             'name' => 'required|string|max:55',
             // Email must be unique, but ignore the current user's email
-            'email' => 'required|email|unique:users,email' . $this->id,
+            'email' => 'required|email|unique:users,email,' . $this->user->id,
             'password' => [
                 'confirmed',
                 Password::min(8)
